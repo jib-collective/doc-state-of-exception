@@ -1,6 +1,7 @@
 const awspublish = require('gulp-awspublish');
 const cloudfront = require('gulp-cloudfront-invalidate');
 const concat = require('gulp-concat');
+const cssnano = require('gulp-cssnano');
 const gulp = require('gulp');
 const gulpIf = require('gulp-if');
 const gulpWebpack = require('webpack-stream');
@@ -64,7 +65,7 @@ gulp.task('markup', () => {
 
       return '';
     }))
-    .pipe(htmlmin())
+    .pipe(gulpIf(ENV === 'production', htmlmin()))
     .pipe(gulp.dest('dist/markup/'));
 });
 
@@ -91,9 +92,10 @@ gulp.task('styles', () => {
   ]);
 
   return merge(sassStream, cssStream)
-      .pipe(sourcemaps.init())
+      .pipe(gulpIf(ENV !== 'production', sourcemaps.init()))
       .pipe(concat('app.css'))
-      .pipe(sourcemaps.write())
+      .pipe(gulpIf(ENV === 'production', cssnano()))
+      .pipe(gulpIf(ENV !== 'production', sourcemaps.write()))
       .pipe(gulp.dest('dist/assets/styles/'));
 });
 

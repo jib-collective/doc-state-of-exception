@@ -1,17 +1,36 @@
-const gulp = require('gulp');
+const awspublish = require('gulp-awspublish');
+const cloudfront = require('gulp-cloudfront-invalidate');
 const concat = require('gulp-concat');
+const gulp = require('gulp');
+const gulpIf = require('gulp-if');
+const gulpWebpack = require('webpack-stream');
+const htmlmin = require('gulp-htmlmin');
 const imagemin = require('gulp-imagemin');
 const merge = require('merge-stream');
+const parallelize = require('concurrent-transform');
 const process = require('process');
+const rename = require('gulp-rename');
 const replace = require('gulp-replace');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
-const gulpWebpack = require('webpack-stream');
 const webpack = require('webpack');
+
+const ENV = process.env.ENV || 'dev';
+const s3Config = require('./aws.json').s3;
+const cloudfrontConfig = {
+  accessKeyId: s3Config.accessKeyId,
+  secretAccessKey: s3Config.secretAccessKey,
+  region: s3Config.region,
+  bucket: s3Config.bucket,
+  distribution: require('./aws.json').cloudfront.distributionId,
+  paths: [
+    '/state-of-exception/dist/*',
+  ],
+};
 
 let ASSET_PATH = '/dist/assets';
 
-if (process.env.ENV === 'production') {
+if (ENV === 'production') {
   ASSET_PATH = './dist/assets';
 }
 
@@ -45,6 +64,7 @@ gulp.task('markup', () => {
 
       return '';
     }))
+    .pipe(htmlmin())
     .pipe(gulp.dest('dist/markup/'));
 });
 
@@ -58,7 +78,7 @@ gulp.task('images', () => {
 
 gulp.task('scripts', () => {
   return gulp.src('assets/scripts/app.js')
-    .pipe(gulpWebpack(require(`./webpack-config.${process.env.ENV}`), webpack))
+    .pipe(gulpWebpack(require(`./webpack-config.${ENV}`), webpack))
     .pipe(gulp.dest('dist/assets/scripts/'));
 });
 
@@ -75,6 +95,31 @@ gulp.task('styles', () => {
       .pipe(concat('app.css'))
       .pipe(sourcemaps.write())
       .pipe(gulp.dest('dist/assets/styles/'));
+});
+
+gulp.task('upload', ['styles', 'scripts', 'images', 'markup'], () => {
+  let publisher = awspublish.create(s3Config);
+  const cacheTime = (60 * 60 * 24) * 14; // 14 days
+  const awsHeaders = {
+    'Cache-Control': `public, max-age=${cacheTime}, s-maxage=${cacheTime}`,
+  };
+  const gzippable = function(file) {
+    const match = file.path.match(/\.(svg|json|geojson|vtt|html|css|js)$/gi);
+    return match;
+  };
+
+  return gulp.src([
+    './dist/**/*',
+  ])
+    .pipe(rename((path) => {
+        path.dirname = `/state-of-exception/dist/${path.dirname}`;
+        return path;
+    }))
+    .pipe(gulpIf(gzippable, awspublish.gzip()))
+    .pipe(publisher.cache())
+    .pipe(parallelize(publisher.publish(awsHeaders), 10))
+    .pipe(awspublish.reporter())
+    .pipe(cloudfront(cloudfrontConfig));
 });
 
 gulp.task('watch', () => {

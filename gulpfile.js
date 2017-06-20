@@ -2,13 +2,18 @@ const gulp = require('gulp');
 const concat = require('gulp-concat');
 const imagemin = require('gulp-imagemin');
 const merge = require('merge-stream');
+const process = require('process');
 const replace = require('gulp-replace');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const gulpWebpack = require('webpack-stream');
 const webpack = require('webpack');
 
-const ASSET_PATH = '/dist/assets';
+let ASSET_PATH = '/dist/assets';
+
+if (process.env.ENV === 'production') {
+  ASSET_PATH = './dist/assets';
+}
 
 gulp.task('markup', () => {
   return gulp.src('markup/**/*.html')
@@ -53,7 +58,7 @@ gulp.task('images', () => {
 
 gulp.task('scripts', () => {
   return gulp.src('assets/scripts/app.js')
-    .pipe(gulpWebpack(require('./webpack-config.dev.js'), webpack))
+    .pipe(gulpWebpack(require(`./webpack-config.${process.env.ENV}`), webpack))
     .pipe(gulp.dest('dist/assets/scripts/'));
 });
 
@@ -78,3 +83,10 @@ gulp.task('watch', () => {
   gulp.watch('assets/images/**/*', ['images']);
   gulp.watch('markup/**/*.html', ['markup']);
 });
+
+gulp.task('default', [
+  'markup',
+  'images',
+  'styles',
+  'scripts',
+]);

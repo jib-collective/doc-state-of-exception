@@ -1,0 +1,36 @@
+{
+  "name": "doc-state-of-exception",
+  "version": "1.0.0",
+  "description": "Interactive about G20 summit",
+  "main": "index.js",
+  "scripts": {
+    "watch": "gulp watch",
+    "build": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gustavpursche/doc-state-of-exception.git"
+  },
+  "author": "Gustav Pursche",
+  "contributors": [
+    "Paul Wagner",
+    "Pierre Maite"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gustavpursche/doc-state-of-exception/issues"
+  },
+  "homepage": "https://jib-collective.net/stories/state-of-exception/",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-imagemin": "^3.3.0",
+    "gulp-replace": "^0.5.4",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.0",
+    "merge-stream": "^1.0.1",
+    "sanitize.css": "^5.0.0",
+    "webpack": "^3.0.0",
+    "webpack-stream": "^3.2.0"
+  }
+}

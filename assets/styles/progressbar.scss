@@ -8,7 +8,7 @@
   &__progress {
     background-color: white;
     height: 3px;
-    transition: width 100ms ease;
+    transition: width 200ms ease;
     will-change: width;
     width: 0;
   }

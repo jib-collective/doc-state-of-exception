@@ -1,0 +1,15 @@
+.progressbar {
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+
+  &__progress {
+    background-color: white;
+    height: 3px;
+    transition: width 100ms ease;
+    will-change: width;
+    width: 0;
+  }
+}

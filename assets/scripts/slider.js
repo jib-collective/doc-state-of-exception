@@ -1,4 +1,5 @@
 import { lory } from 'lory.js';
+import { progress } from './progress';
 
 const init = () => {
   let loryInstance;
@@ -7,6 +8,11 @@ const init = () => {
 
   const getSlideByIndex = index => {
     return slides[index] || undefined;
+  };
+
+  const updateProgress = (event) => {
+    const nextSlideIndex = event.detail.nextSlide;
+    progress(parseInt((nextSlideIndex + 1) * 100 / slides.length, 10));
   };
 
   const preloadNextImages = (event) => {
@@ -64,7 +70,11 @@ const init = () => {
     enableMouseEvents: true,
   });
 
-  slider.addEventListener('before.lory.slide', preloadNextImages);
+  slider.addEventListener('before.lory.slide', (event) => {
+    preloadNextImages(event);
+    updateProgress(event);
+  });
+
   document.addEventListener('keydown', handleKeys);
 };
 

@@ -26,14 +26,16 @@
     flex-direction: column;
     justify-content: center;
     height: 100%;
-    padding: 1rem;
-
-    @include mq(small) {
-      padding: 2.5rem;
-    }
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding: 0 1rem;
 
     > * {
       max-width: 65rem;
     }
+  }
+
+  &--intro &__content {
+    justify-content: flex-start;
   }
 }

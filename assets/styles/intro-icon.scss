@@ -1,47 +1,13 @@
-@keyframes wobble-hor-bottom {
-  10%,
-  100% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(-15px) rotate(-4deg);
-  }
-
-  30% {
-    transform: translateX(7px) rotate(4deg);
-  }
-
-  45% {
-    transform: translateX(-7px) rotate(-3deg);
-  }
-
-  60% {
-    transform: translateX(4px) rotate(2deg);
-  }
-
-  75% {
-    transform: translateX(-3px) rotate(-.8deg);
-  }
-}
-
 .intro-icon {
-  animation: wobble-hor-bottom 2000ms 4s infinite both;
   fill: currentColor;
-  height: 2.2rem;
-  margin-top: 1.5rem;
+  height: 2.5rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
   position: relative;
-  transition: transform 200ms ease;
-  transform-origin: 50% 50%;
-  width: 2.2rem;
-
-  @include mq(supersmall) {
-    height: 2.5rem;
-    width: 2.5rem;
-  }
+  width: 2.5rem;
 
   @include mq(tablet) {
-    margin-top: 3rem;
+    margin-top: 2rem;
   }
 
   &:hover,

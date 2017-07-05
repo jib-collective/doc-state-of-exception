@@ -10,6 +10,11 @@
     margin-top: 2rem;
   }
 
+  @include mq(desktop) {
+    height: 5rem;
+    width: 5rem;
+  }
+
   &:hover,
   &:focus {
     transform: scale(1.5);

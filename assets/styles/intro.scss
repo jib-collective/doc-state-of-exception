@@ -10,11 +10,21 @@
     font-size: 1.15rem;
   }
 
+  @include mq(desktop) {
+    font-size: 1.3rem;
+  }
+
+  &--author {
+    @include mq(tablet) {
+      font-size: 1.4rem;
+    }
+  }
+
   & + & {
-    margin-top: 1rem;
+    margin-top: .5rem;
 
     @include mq(tablet) {
-      margin-top: 1.5rem;
+      margin-top: 1rem;
     }
   }
 }

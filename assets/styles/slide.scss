@@ -10,7 +10,8 @@
   white-space: normal;
   width: 100vw;
 
-  &--intro {
+  &--intro,
+  &--intro-title {
     background-color: $color-steel;
     color: white;
   }
@@ -36,6 +37,15 @@
   }
 
   &--intro &__content {
-    justify-content: flex-start;
+    @include mq($until: tablet) {
+      justify-content: flex-start;
+    }
+
+    > div {
+      @include mq($until: desktop) {
+        padding-bottom: 2rem;
+        padding-top: 2rem;
+      }
+    }
   }
 }

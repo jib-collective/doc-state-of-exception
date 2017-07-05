@@ -1,0 +1,38 @@
+.slide {
+  cursor: pointer;
+  display: inline-block;
+  height: 100vh;
+  position: relative;
+  text-align: center;
+  user-select: none;
+  vertical-align: middle;
+  white-space: normal;
+  width: 100vw;
+
+  &--intro {
+    background-color: $color-steel;
+    color: white;
+  }
+
+  &--chapter-intro {
+    background-color: $color-guardsmen;
+    color: white;
+  }
+
+  &__content {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    padding: 1rem;
+
+    @include mq(small) {
+      padding: 2.5rem;
+    }
+
+    > * {
+      max-width: 55rem;
+    }
+  }
+}

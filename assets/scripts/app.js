@@ -1,5 +1,9 @@
-import { init as chaptersInit } from 'lib/chapters';
-import { init as sectionsInit } from 'lib/sections';
+import 'fg-loadcss/src/loadCSS';
+import 'fg-loadcss/src/cssrelpreload';
 
-chaptersInit();
-sectionsInit();
+import domready from 'domready';
+import { init as slider } from './slider';
+
+domready(() => {
+  slider();
+});

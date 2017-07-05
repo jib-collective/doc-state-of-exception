@@ -1,0 +1,12 @@
+.slider {
+  height: 100vh;
+  overflow: hidden;
+  width: 100vw;
+
+  &__slides {
+    font-size: 0;
+    line-height: 0;
+    position: relative;
+    white-space: nowrap;
+  }
+}

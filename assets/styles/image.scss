@@ -1,0 +1,18 @@
+.image {
+  align-items: center;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  margin: 0;
+
+  > img {
+    height: auto;
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+  }
+}

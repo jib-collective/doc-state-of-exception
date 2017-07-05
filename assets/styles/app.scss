@@ -1,2 +1,13 @@
-@import "./variables.scss";
-@import "./mixins.scss";
+@import "variables.scss";
+@import 'node_modules/sass-mq/_mq.scss';
+
+@import "base.scss";
+@import "fonts.scss";
+
+@import "image.scss";
+@import "quote.scss";
+@import "intro.scss";
+@import "intro-icon.scss";
+@import "slide.scss";
+@import "slider.scss";
+@import "title.scss";

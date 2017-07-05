@@ -1,3 +1,4 @@
+const autoprefixer = require('gulp-autoprefixer');
 const awspublish = require('gulp-awspublish');
 const cloudfront = require('gulp-cloudfront-invalidate');
 const concat = require('gulp-concat');
@@ -5,13 +6,16 @@ const cssnano = require('gulp-cssnano');
 const gulp = require('gulp');
 const gulpIf = require('gulp-if');
 const gulpWebpack = require('webpack-stream');
+const header = require('gulp-header');
 const htmlmin = require('gulp-htmlmin');
 const imagemin = require('gulp-imagemin');
 const merge = require('merge-stream');
+const os = require('os');
 const parallelize = require('concurrent-transform');
 const process = require('process');
 const rename = require('gulp-rename');
 const replace = require('gulp-replace');
+const resize = require('gulp-image-resize')
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const webpack = require('webpack');
@@ -28,11 +32,12 @@ const cloudfrontConfig = {
     '/state-of-exception/dist/*',
   ],
 };
+const IMAGE_SIZES = [ 400, 600, 800, 1200, 1400, 1800, 2000 ];
 
 let ASSET_PATH = '/dist/assets';
 
 if (ENV === 'production') {
-  ASSET_PATH = './dist/assets';
+  ASSET_PATH = 'https://cdn.jib-collective.net/state-of-exception/dist/assets';
 }
 
 gulp.task('markup', () => {
@@ -47,19 +52,38 @@ gulp.task('markup', () => {
 
       switch(type) {
         case 'asset':
+          const package = require('./package.json');
+          const cacheBust = `?version=${package.version}`;
+
           switch(attrs.type) {
             case 'style':
-              return `${ASSET_PATH}/styles/app.css`;
+              return `${ASSET_PATH}/styles/app.css${cacheBust}`;
               break;
 
             case 'script':
-              return `${ASSET_PATH}/scripts/app.js`;
+              return `${ASSET_PATH}/scripts/app.js${cacheBust}`;
               break;
           }
           break;
 
         case 'image':
-          return '[replaced image]';
+          const name = `G20_${attrs.name}`;
+          const getSourceSet = fileName => {
+            const sortedSizes = Array.from(IMAGE_SIZES).reverse();
+
+            return sortedSizes.map(width => `
+              ${ASSET_PATH}/images/${name}-${width}.jpg ${width}w
+            `).join(', ');
+          };
+
+          return `
+            <figure class="image">
+              <img data-src="${ASSET_PATH}/images/${name}-2000.jpg"
+                   data-srcset="${getSourceSet(name)}"
+                   alt=""
+                   class="js-lazy-image" />
+            </figure>
+          `;
           break;
       }
 
@@ -70,10 +94,38 @@ gulp.task('markup', () => {
 });
 
 gulp.task('images', () => {
-  return gulp.src('assets/images/**/*')
-    .pipe(imagemin({
-      optimizationLevel: 5
-    }))
+  const imageStream = merge();
+  const defaults = {
+    crop : false,
+    imageMagick: true,
+    upscale : false,
+  };
+
+  IMAGE_SIZES.forEach(width => {
+    const options = Object.assign({}, defaults, { width });
+    const stream = gulp.src('assets/images/**/*')
+        .pipe(parallelize(
+          resize(options),
+          os.cpus().length
+        ))
+        .pipe(parallelize(
+          imagemin([
+            imagemin.jpegtran({
+              progressive: true,
+            }),
+          ], {
+            verbose: false,
+          }),
+          os.cpus().length
+        ))
+        .pipe(rename(path => {
+          path.basename += `-${width}`;
+        }));
+
+    imageStream.add(stream);
+  });
+
+  return imageStream
     .pipe(gulp.dest('dist/assets/images'));
 });
 
@@ -83,17 +135,24 @@ gulp.task('scripts', () => {
     .pipe(gulp.dest('dist/assets/scripts/'));
 });
 
+gulp.task('fonts', () => {
+  return gulp.src('assets/fonts/**/*')
+    .pipe(gulp.dest('dist/assets/fonts/'));
+});
+
 gulp.task('styles', () => {
-  const sassStream = gulp.src('assets/styles/**/*.scss')
-    .pipe(sass().on('error', sass.logError));
-
-  const cssStream = gulp.src([
-    'node_modules/sanitize.css/sanitize.css',
-  ]);
-
-  return merge(sassStream, cssStream)
+  return gulp.src('assets/styles/app.scss')
+      .pipe(header(`
+          $font-path: "${ASSET_PATH}/fonts/";
+      `))
+      .pipe(sass().on('error', sass.logError))
       .pipe(gulpIf(ENV !== 'production', sourcemaps.init()))
       .pipe(concat('app.css'))
+      .pipe(autoprefixer({
+          browsers: [
+            'last 2 versions',
+          ],
+      }))
       .pipe(gulpIf(ENV === 'production', cssnano()))
       .pipe(gulpIf(ENV !== 'production', sourcemaps.write()))
       .pipe(gulp.dest('dist/assets/styles/'));
@@ -106,7 +165,7 @@ gulp.task('upload', ['styles', 'scripts', 'images', 'markup'], () => {
     'Cache-Control': `public, max-age=${cacheTime}, s-maxage=${cacheTime}`,
   };
   const gzippable = function(file) {
-    const match = file.path.match(/\.(svg|json|geojson|vtt|html|css|js)$/gi);
+    const match = file.path.match(/\.(html|css|js|ttf|otf)$/gi);
     return match;
   };
 
@@ -124,14 +183,15 @@ gulp.task('upload', ['styles', 'scripts', 'images', 'markup'], () => {
     .pipe(cloudfront(cloudfrontConfig));
 });
 
-gulp.task('watch', () => {
+gulp.task('watch', ['build',], () => {
   gulp.watch('assets/styles/**/*', ['styles']);
   gulp.watch('assets/scripts/**/*', ['scripts']);
   gulp.watch('assets/images/**/*', ['images']);
   gulp.watch('markup/**/*.html', ['markup']);
 });
 
-gulp.task('default', [
+gulp.task('build', [
+  'fonts',
   'markup',
   'images',
   'styles',

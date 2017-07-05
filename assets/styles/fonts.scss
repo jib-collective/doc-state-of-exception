@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'Tabac';
+  font-weight: 600;
+  src: url('#{$font-path}tabac_medium.woff2') format('woff2'),
+       url('#{$font-path}tabac_medium.woff') format('woff'),
+       url('#{$font-path}tabac_medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Mark OT';
+  font-weight: 400;
+  src: url('#{$font-path}markot-regular.woff2') format('woff2'),
+       url('#{$font-path}markot-regular.woff') format('woff'),
+       url('#{$font-path}markot-regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Mark OT';
+  font-weight: 900;
+  src: url('#{$font-path}markot-black.woff2') format('woff2'),
+       url('#{$font-path}markot-black.woff') format('woff'),
+       url('#{$font-path}markot-black.ttf') format('truetype');
+}

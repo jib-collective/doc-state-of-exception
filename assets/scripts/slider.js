@@ -1,4 +1,5 @@
 import { lory } from 'lory.js';
+import { showCaption, hideCaption } from './caption';
 import { progress } from './progress';
 
 const init = () => {
@@ -71,8 +72,28 @@ const init = () => {
   });
 
   slider.addEventListener('before.lory.slide', (event) => {
+    const slide = getSlideByIndex(event.detail.nextSlide);
+    const image = slide.querySelector('.image');
+
     preloadNextImages(event);
     updateProgress(event);
+
+    if (image) {
+      showCaption(image);
+
+      setTimeout(() => {
+        hideCaption(image);
+      }, 1200);
+    }
+  });
+
+  slider.addEventListener('on.lory.touchstart', (event) => {
+    const slide = getSlideByIndex(loryInstance.returnIndex());
+    const image = slide.querySelector('.image');
+
+    if (image) {
+      showCaption(image);
+    }
   });
 
   document.addEventListener('keydown', handleKeys);

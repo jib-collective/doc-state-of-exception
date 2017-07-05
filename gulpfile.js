@@ -89,7 +89,7 @@ gulp.task('markup', () => {
                    class="js-lazy-image" />
 
               <figcaption class="image__caption">
-                ${caption}
+                <p>${caption}</p>
               </figcaption>
             </figure>
           `;

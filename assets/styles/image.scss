@@ -26,9 +26,16 @@
     font-weight: $font-weight-regular;
     left: 0;
     line-height: 1.2;
-    text-transform: uppercase;
-    padding: .5rem;
+    overflow-y: hidden;
     position: absolute;
+    text-transform: uppercase;
+    transition: max-height 200ms cubic-bezier(0, 1, 0.5, 1);
     width: 100%;
+    will-change: max-height;
+
+    > p {
+      margin: 0;
+      padding: .5rem;
+    }
   }
 }

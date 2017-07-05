@@ -3,6 +3,7 @@ const awspublish = require('gulp-awspublish');
 const cloudfront = require('gulp-cloudfront-invalidate');
 const concat = require('gulp-concat');
 const cssnano = require('gulp-cssnano');
+const fs = require('fs');
 const gulp = require('gulp');
 const gulpIf = require('gulp-if');
 const gulpWebpack = require('webpack-stream');
@@ -12,6 +13,7 @@ const imagemin = require('gulp-imagemin');
 const merge = require('merge-stream');
 const os = require('os');
 const parallelize = require('concurrent-transform');
+const path = require('path');
 const process = require('process');
 const rename = require('gulp-rename');
 const replace = require('gulp-replace');
@@ -68,6 +70,9 @@ gulp.task('markup', () => {
 
         case 'image':
           const name = `G20_${attrs.name}`;
+          const captionFileName = `${name}-${attrs.language}.txt`;
+          const captionPath = path.resolve(`./assets/images/${captionFileName}`);
+          const caption = fs.readFileSync(captionPath, 'utf-8');
           const getSourceSet = fileName => {
             const sortedSizes = Array.from(IMAGE_SIZES).reverse();
 
@@ -82,6 +87,10 @@ gulp.task('markup', () => {
                    data-srcset="${getSourceSet(name)}"
                    alt=""
                    class="js-lazy-image" />
+
+              <figcaption class="image__caption">
+                ${caption}
+              </figcaption>
             </figure>
           `;
           break;
@@ -193,7 +202,7 @@ gulp.task('watch', ['build',], () => {
 gulp.task('build', [
   'fonts',
   'markup',
-  'images',
+  //'images',
   'styles',
   'scripts',
 ]);

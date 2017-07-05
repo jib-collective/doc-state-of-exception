@@ -77,14 +77,6 @@ const init = () => {
 
     preloadNextImages(event);
     updateProgress(event);
-
-    if (image) {
-      showCaption(image);
-
-      setTimeout(() => {
-        hideCaption(image);
-      }, 1200);
-    }
   });
 
   slider.addEventListener('on.lory.touchstart', (event) => {

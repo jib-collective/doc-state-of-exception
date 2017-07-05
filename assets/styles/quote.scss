@@ -22,6 +22,10 @@
       line-height: 1.3;
       margin-top: 1rem;
     }
+
+    @include mq(desktop) {
+      font-size: 2.2rem;
+    }
   }
 
   &__author {
@@ -31,5 +35,13 @@
     line-height: 1.2;
     margin-top: 1.5rem;
     text-transform: uppercase;
+
+    @include mq(supersmall) {
+      font-size: .9rem;
+    }
+
+    @include mq(small) {
+      font-size: 1rem;
+    }
   }
 }

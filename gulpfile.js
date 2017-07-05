@@ -112,7 +112,7 @@ gulp.task('images', () => {
 
   IMAGE_SIZES.forEach(width => {
     const options = Object.assign({}, defaults, { width });
-    const stream = gulp.src('assets/images/**/*')
+    const stream = gulp.src('assets/images/**/*.jpg')
         .pipe(parallelize(
           resize(options),
           os.cpus().length
@@ -195,14 +195,17 @@ gulp.task('upload', ['styles', 'scripts', 'images', 'markup'], () => {
 gulp.task('watch', ['build',], () => {
   gulp.watch('assets/styles/**/*', ['styles']);
   gulp.watch('assets/scripts/**/*', ['scripts']);
-  gulp.watch('assets/images/**/*', ['images']);
-  gulp.watch('markup/**/*.html', ['markup']);
+  gulp.watch('assets/images/**/*.jpg', ['images']);
+  gulp.watch([
+    'markup/**/*.html',
+    'assets/images/**/*.txt',
+  ], ['markup']);
 });
 
 gulp.task('build', [
   'fonts',
   'markup',
-  //'images',
+  'images',
   'styles',
   'scripts',
 ]);

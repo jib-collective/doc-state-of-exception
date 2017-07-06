@@ -1,11 +1,13 @@
 import { lory } from 'lory.js';
-import { showCaption, hideCaption } from './caption';
 import { progress } from './progress';
+import { toggleCaption } from './caption';
 
 const init = () => {
   let loryInstance;
+  let activeImage;
   const slider = document.querySelector('.js-slider');
   const slides = [...slider.querySelectorAll('.js-slide')];
+  const info = document.querySelector('.js-info');
 
   const getSlideByIndex = index => {
     return slides[index] || undefined;
@@ -72,6 +74,8 @@ const init = () => {
   });
 
   slider.addEventListener('before.lory.slide', (event) => {
+    const slide = getSlideByIndex(event.detail.nextSlide);
+    const image = slide.querySelector('.image');
     const fullscreen = document.querySelector('.js-fullscreen');
 
     preloadNextImages(event);
@@ -80,18 +84,24 @@ const init = () => {
     if (fullscreen) {
       fullscreen.classList.toggle('fullscreen--tiny', event.detail.nextSlide > 1);
     }
-  });
 
-  slider.addEventListener('on.lory.touchstart', (event) => {
-    const slide = getSlideByIndex(loryInstance.returnIndex());
-    const image = slide.querySelector('.image');
+    console.log(image);
 
     if (image) {
-      showCaption(image);
+      activeImage = image;
+      info.style.opacity = 1;
+    } else {
+      activeImage = undefined;
+      info.style.opacity = 0;
     }
   });
 
   document.addEventListener('keydown', handleKeys);
+
+  info.addEventListener('click', event => {
+    event.preventDefault();
+    toggleCaption(activeImage);
+  });
 };
 
 export { init };

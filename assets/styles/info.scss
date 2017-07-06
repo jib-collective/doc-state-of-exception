@@ -1,25 +1,35 @@
 .info {
   background: transparent;
   border: none;
-  bottom: .5rem;
   color: white;
   cursor: pointer;
   opacity: 0;
-  padding: 0;
+  padding: .5rem;
   position: absolute;
-  right: 1.5rem;
+  right: 3rem;
+  text-align: center;
+  top: .5rem;
   transition: opacity 400ms ease;
   will-change: opacity;
   z-index: 20;
 
+  .is-fullscreen & {
+    right: .5rem;
+  }
+
   &:hover,
   &:focus {
+    outline: none;
     opacity: 1;
   }
 
   &:hover &__label,
   &:focus &__label {
     opacity: 1;
+  }
+
+  &--decent {
+    opacity: .4;
   }
 
   &__label {

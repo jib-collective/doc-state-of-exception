@@ -75,7 +75,7 @@ const init = () => {
 
   slider.addEventListener('before.lory.slide', (event) => {
     const slide = getSlideByIndex(event.detail.nextSlide);
-    const image = slide.querySelector('.image');
+    const image = slide && slide.querySelector('.image');
     const fullscreen = document.querySelector('.js-fullscreen');
 
     preloadNextImages(event);
@@ -85,12 +85,10 @@ const init = () => {
       fullscreen.classList.toggle('fullscreen--tiny', event.detail.nextSlide > 1);
     }
 
-    if (image) {
-      activeImage = image;
-      info.style.opacity = 1;
-    } else {
-      activeImage = undefined;
-      info.style.opacity = 0;
+    activeImage = image
+
+    if (info) {
+      info.classList.toggle('info--decent', !!image);
     }
   });
 

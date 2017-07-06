@@ -6,8 +6,10 @@ const init = () => {
   screenfull.onchange(() => {
     if (screenfull.isFullscreen) {
       trigger.style.display = 'none';
+      document.body.classList.add('is-fullscreen');
     } else {
       trigger.style.display = 'block';
+      document.body.classList.remove('is-fullscreen');
     }
   });
 

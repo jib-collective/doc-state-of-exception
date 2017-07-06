@@ -11,17 +11,17 @@
     margin-top: 1.5rem;
 
     @include mq(supersmall) {
-      font-size: 2.5rem;
+      font-size: 1.6rem;
     }
 
     @include mq(small) {
-      font-size: 1.6rem;
+      font-size: 1.7rem;
     }
 
     @include mq(tablet) {
       font-size: 1.8rem;
       margin-bottom: 2.5rem;
-      margin-top: 1rem;
+      margin-top: 0;
     }
 
     @include mq(desktop) {

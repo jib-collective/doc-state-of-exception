@@ -94,6 +94,12 @@ gulp.task('markup', () => {
               <figcaption class="image__caption">
                 <p>${caption}</p>
               </figcaption>
+
+              <noscript>
+                <img src="${ASSET_PATH}/images/${name}-2000.jpg"
+                     srcset="${getSourceSet(name)}"
+                     alt="" />
+              </noscript>
             </figure>
           `;
           break;

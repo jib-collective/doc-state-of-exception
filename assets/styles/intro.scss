@@ -1,6 +1,6 @@
 .intro {
   font-family: $font-family-serif;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: $font-weight-medium;
   line-height: 1.4;
   margin-bottom: 0;
@@ -24,7 +24,7 @@
   }
 
   & + & {
-    margin-top: .5rem;
+    margin-top: .75rem;
 
     @include mq(tablet) {
       margin-top: 1rem;

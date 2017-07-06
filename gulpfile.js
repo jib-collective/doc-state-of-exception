@@ -65,6 +65,9 @@ gulp.task('markup', () => {
             case 'script':
               return `${ASSET_PATH}/scripts/app.js${cacheBust}`;
               break;
+
+            case 'image':
+              return `${ASSET_PATH}/images/${attrs.name}${cacheBust}`;
           }
           break;
 
@@ -134,8 +137,12 @@ gulp.task('images', () => {
     imageStream.add(stream);
   });
 
-  return imageStream
-    .pipe(gulp.dest('dist/assets/images'));
+  const socialMedia = gulp.src('assets/images/social-media/**/*.jpg')
+                        .pipe(gulp.dest('dist/assets/images/social-media/'));
+
+  imageStream.pipe(gulp.dest('dist/assets/images'))
+
+  return merge(imageStream, socialMedia);
 });
 
 gulp.task('scripts', () => {
@@ -179,7 +186,7 @@ gulp.task('upload', ['styles', 'scripts', 'images', 'markup'], () => {
   };
 
   return gulp.src([
-    './dist/**/*',
+    './dist/**/**/*',
   ])
     .pipe(rename((path) => {
         path.dirname = `/state-of-exception/dist/${path.dirname}`;

@@ -1,16 +1,16 @@
 .info {
   background: transparent;
   border: none;
+  bottom: 1.5rem;
   color: white;
   cursor: pointer;
   opacity: 0;
   padding: 0;
   position: absolute;
-  right: 1rem;
-  top: 1.5rem;
+  right: 1.5rem;
   transition: opacity 400ms ease;
   will-change: opacity;
-  z-index: 10;
+  z-index: 20;
 
   &:hover,
   &:focus {

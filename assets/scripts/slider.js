@@ -85,8 +85,6 @@ const init = () => {
       fullscreen.classList.toggle('fullscreen--tiny', event.detail.nextSlide > 1);
     }
 
-    console.log(image);
-
     if (image) {
       activeImage = image;
       info.style.opacity = 1;

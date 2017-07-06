@@ -3,10 +3,18 @@
   overflow: hidden;
   width: 100vw;
 
+  .no-js & {
+    height: auto;
+  }
+
   &__slides {
     font-size: 0;
     line-height: 0;
     position: relative;
     white-space: nowrap;
+  }
+
+  .no-js &__slides {
+    white-space: normal;
   }
 }

@@ -10,6 +10,11 @@
   white-space: normal;
   width: 100vw;
 
+  .no-js & {
+    height: auto;
+    min-height: 100vh;
+  }
+
   &--intro,
   &--intro-title {
     background-color: $color-steel;
@@ -34,6 +39,10 @@
     > * {
       max-width: 65rem;
     }
+  }
+
+  .no-js &__content {
+    height: auto;
   }
 
   &--intro &__content {

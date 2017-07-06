@@ -39,4 +39,8 @@
       padding: .5rem;
     }
   }
+
+  .no-js &__caption {
+    max-height: none;
+  }
 }

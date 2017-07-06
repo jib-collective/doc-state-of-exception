@@ -13,6 +13,10 @@
   will-change: opacity;
   z-index: 10;
 
+  .no-js & {
+    display: none;
+  }
+
   &--tiny {
     background: none;
     opacity: .4;

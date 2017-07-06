@@ -46,6 +46,12 @@
 
     a {
       color: currentColor;
+      text-decoration: none;
+
+      &:hover,
+      &:focus {
+        text-decoration: underline;
+      }
     }
   }
 }

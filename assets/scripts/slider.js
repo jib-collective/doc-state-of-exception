@@ -72,11 +72,14 @@ const init = () => {
   });
 
   slider.addEventListener('before.lory.slide', (event) => {
-    const slide = getSlideByIndex(event.detail.nextSlide);
-    const image = slide.querySelector('.image');
+    const fullscreen = document.querySelector('.js-fullscreen');
 
     preloadNextImages(event);
     updateProgress(event);
+
+    if (fullscreen) {
+      fullscreen.classList.toggle('fullscreen--tiny', event.detail.nextSlide > 1);
+    }
   });
 
   slider.addEventListener('on.lory.touchstart', (event) => {

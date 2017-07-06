@@ -7,11 +7,45 @@
   position: absolute;
   right: 1.5rem;
   top: 1.5rem;
+  transition: opacity 400ms ease;
+  will-change: opacity;
   z-index: 10;
 
+  &--tiny {
+    opacity: .2;
+  }
+
+  &--tiny &__label {
+    opacity: 0;
+  }
+
+  &:hover,
+  &:focus {
+    opacity: 1;
+  }
+
+  &:hover &__label,
+  &:focus &__label {
+    opacity: 1;
+  }
+
+  &__label {
+    font-family: $font-family-sans-serif;
+    font-size: .8rem;
+    font-weight: $font-weight-regular;
+    line-height: 1;
+    opacity: 1;
+    transition: opacity 400ms ease;
+    vertical-align: middle;
+    will-change: opacity;
+  }
+
   &__icon {
+    display: inline-block;
     fill: currentColor;
     height: 1.5rem;
+    margin-left: .3rem;
+    vertical-align: middle;
     width: 1.5rem;
   }
 }

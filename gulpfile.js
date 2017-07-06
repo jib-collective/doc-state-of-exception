@@ -167,7 +167,7 @@ gulp.task('styles', () => {
       .pipe(gulp.dest('dist/assets/styles/'));
 });
 
-gulp.task('upload', ['styles', 'scripts', 'images', 'markup'], () => {
+gulp.task('upload', ['styles', 'scripts', /*'images',*/ 'markup'], () => {
   let publisher = awspublish.create(s3Config);
   const cacheTime = (60 * 60 * 24) * 14; // 14 days
   const awsHeaders = {
@@ -205,7 +205,7 @@ gulp.task('watch', ['build',], () => {
 gulp.task('build', [
   'fonts',
   'markup',
-  'images',
+  //'images',
   'styles',
   'scripts',
 ]);

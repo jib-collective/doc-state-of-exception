@@ -1,6 +1,6 @@
 {
   "name": "doc-state-of-exception",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Interactive about G20 summit",
   "main": "index.js",
   "scripts": {

@@ -1,12 +1,19 @@
 .intro-icon {
   fill: currentColor;
   height: 2.8rem;
-  margin-bottom: 1.5rem;
-  margin-top: 3rem;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
   position: relative;
   transition: transform 200ms ease;
   vertical-align: middle;
   width: 2.8rem;
+
+  @include mq(supersmall) {
+    height: 3rem;
+    margin-bottom: 1.5rem;
+    margin-top: 3rem;
+    width: 3rem;
+  }
 
   @include mq(tablet) {
     margin-top: 2.5rem;
@@ -14,9 +21,9 @@
 
   &--touch {
     @include mq(desktop) {
-      height: 3rem;
+      height: 3.5rem;
       margin-bottom: 0;
-      width: 3rem;
+      width: 3.5rem;
     }
   }
 
@@ -26,14 +33,10 @@
     }
 
     @include mq(desktop) {
-      height: 5rem;
+      height: 5.5rem;
       margin-bottom: 0;
-      width: 5rem;
+      width: 5.5rem;
     }
-  }
-
-  @include mq(tablet) {
-    margin-top: 2rem;
   }
 
   &:hover,

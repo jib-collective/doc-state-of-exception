@@ -3,15 +3,12 @@ import screenfull from 'screenfull';
 const init = () => {
   const trigger = document.querySelector('.js-fullscreen');
 
-  screenfull.onchange(() => {
-    if (screenfull.isFullscreen) {
-      trigger.style.display = 'none';
-      document.body.classList.add('is-fullscreen');
-    } else {
-      trigger.style.display = 'block';
-      document.body.classList.remove('is-fullscreen');
-    }
-  });
+  if (screenfull.enabled) {
+    screenfull.onchange(() => {
+      trigger.style.display = screenfull.isFullscreen ? 'none' : 'block';
+      document.body.classList.toggle('is-fullscreen', screenfull.isFullscreen);
+    });
+  }
 
   if (trigger) {
     if (!screenfull.enabled) {

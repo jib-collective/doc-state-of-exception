@@ -54,7 +54,7 @@
     > div {
       @include mq($until: desktop) {
         padding-bottom: 2rem;
-        padding-top: 5rem;
+        padding-top: 4rem;
       }
     }
   }

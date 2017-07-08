@@ -172,7 +172,9 @@ gulp.task('styles', () => {
       .pipe(concat('app.css'))
       .pipe(autoprefixer({
           browsers: [
+            'Android >= 4.4',
             'last 2 versions',
+            'last 4 iOS versions',
           ],
       }))
       .pipe(gulpIf(ENV === 'production', cssnano()))
@@ -180,7 +182,7 @@ gulp.task('styles', () => {
       .pipe(gulp.dest('dist/assets/styles/'));
 });
 
-gulp.task('upload', ['styles', 'scripts', 'images', 'markup'], () => {
+gulp.task('upload', ['build', ], () => {
   let publisher = awspublish.create(s3Config);
   const cacheTime = (60 * 60 * 24) * 14; // 14 days
   const awsHeaders = {

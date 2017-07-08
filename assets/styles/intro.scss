@@ -1,10 +1,15 @@
 .intro {
   font-family: $font-family-serif;
-  font-size: 1.05rem;
+  font-size: .95rem;
   font-weight: $font-weight-medium;
-  line-height: 1.4;
+  line-height: 1.35;
   margin-bottom: 0;
   margin-top: 0;
+
+  @include mq(supersmall) {
+    font-size: 1.05rem;
+    line-height: 1.4;
+  }
 
   @include mq(tablet) {
     font-size: 1.15rem;

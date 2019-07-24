@@ -1,6 +1,4 @@
 const autoprefixer = require('gulp-autoprefixer');
-const awspublish = require('gulp-awspublish');
-const cloudfront = require('gulp-cloudfront-invalidate');
 const concat = require('gulp-concat');
 const cssnano = require('gulp-cssnano');
 const fs = require('fs');
@@ -23,23 +21,12 @@ const sourcemaps = require('gulp-sourcemaps');
 const webpack = require('webpack');
 
 const ENV = process.env.ENV || 'dev';
-const s3Config = require('./aws.json').s3;
-const cloudfrontConfig = {
-  accessKeyId: s3Config.accessKeyId,
-  secretAccessKey: s3Config.secretAccessKey,
-  region: s3Config.region,
-  bucket: s3Config.bucket,
-  distribution: require('./aws.json').cloudfront.distributionId,
-  paths: [
-    '/state-of-exception/dist/*',
-  ],
-};
 const IMAGE_SIZES = [ 400, 600, 800, 1200, 1400, 1800, 2000 ];
 
-let ASSET_PATH = '/dist/assets';
+let ASSET_PATH = '/assets';
 
 if (ENV === 'production') {
-  ASSET_PATH = 'https://cdn.jib-collective.net/state-of-exception/dist/assets';
+  ASSET_PATH = '/assets';
 }
 
 gulp.task('markup', () => {
@@ -108,7 +95,7 @@ gulp.task('markup', () => {
       return '';
     }))
     .pipe(gulpIf(ENV === 'production', htmlmin()))
-    .pipe(gulp.dest('dist/markup/'));
+    .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('images', () => {
@@ -182,31 +169,6 @@ gulp.task('styles', () => {
       .pipe(gulp.dest('dist/assets/styles/'));
 });
 
-gulp.task('upload', ['build', ], () => {
-  let publisher = awspublish.create(s3Config);
-  const cacheTime = (60 * 60 * 24) * 14; // 14 days
-  const awsHeaders = {
-    'Cache-Control': `public, max-age=${cacheTime}, s-maxage=${cacheTime}`,
-  };
-  const gzippable = function(file) {
-    const match = file.path.match(/\.(html|css|js|ttf|otf)$/gi);
-    return match;
-  };
-
-  return gulp.src([
-    './dist/**/**/*',
-  ])
-    .pipe(rename((path) => {
-        path.dirname = `/state-of-exception/dist/${path.dirname}`;
-        return path;
-    }))
-    .pipe(gulpIf(gzippable, awspublish.gzip()))
-    .pipe(publisher.cache())
-    .pipe(parallelize(publisher.publish(awsHeaders), 10))
-    .pipe(awspublish.reporter())
-    .pipe(cloudfront(cloudfrontConfig));
-});
-
 gulp.task('watch', ['build',], () => {
   gulp.watch('assets/styles/**/*', ['styles']);
   gulp.watch('assets/scripts/**/*', ['scripts']);
@@ -220,7 +182,7 @@ gulp.task('watch', ['build',], () => {
 gulp.task('build', [
   'fonts',
   'markup',
-  'images',
+  //'images',
   'styles',
   'scripts',
 ]);
